@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import axios from "axios";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import type { FieldData, PageChangeEvent } from "../utils/types";
 import "primeicons/primeicons.css";
 import { OverlayPanel } from "primereact/overlaypanel";
-import Overlay from "../components/Overlay";
+const Overlay = React.lazy(() => import("../components/Overlay"));
 
 const apiUrl = import.meta.env.VITE_API_URL as string;
 
@@ -149,14 +149,16 @@ export default function Fetchdata() {
                 </a>
                 <span className="header-text">Title</span>
               </div>
-              <Overlay
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                totalRecords={totalRecords}
-                handleSubmit={handleSubmit}
-                handleClear={handleClear}
-                opRef={op}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Overlay
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                  totalRecords={totalRecords}
+                  handleSubmit={handleSubmit}
+                  handleClear={handleClear}
+                  opRef={op}
+                />
+              </Suspense>
             </div>
           }
         />
